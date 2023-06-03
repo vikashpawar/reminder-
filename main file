@@ -1,0 +1,99 @@
+<html>
+<head>
+    <title>Medicine Reminder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input[type="submit"] {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .success {
+            text-align: center;
+            color: #4CAF50;
+            margin-top: 20px;
+        }
+
+        .error {
+            text-align: center;
+            color: #FF0000;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Medicine Reminder</h1>
+
+    <form id="reminderForm">
+        <label for="medicineName">Medicine Name:</label>
+        <input type="text" id="medicineName" name="medicineName" required>
+        <br>
+        <label for="reminderTime">Reminder Time:</label>
+        <input type="time" id="reminderTime" name="reminderTime" required>
+        <br>
+        <input type="submit" value="Set Reminder">
+    </form>
+
+    <div id="successMessage" class="success"></div>
+    <div id="errorMessage" class="error"></div>
+
+    <script>
+        document.getElementById("reminderForm").addEventListener("submit", function(event) {
+            event.preventDefault(); 
+
+            var medicineName = document.getElementById("medicineName").value;
+            var reminderTime = document.getElementById("reminderTime").value;
+            var currentDate = new Date();
+            var selectedTime = new Date(currentDate.toDateString() + " " + reminderTime);
+            var timeDifference = selectedTime.getTime() - currentDate.getTime();
+
+            if (timeDifference > 0) {
+                setTimeout(function() {
+                    showMessage("It's time to take your medicine: " + medicineName);
+                }, timeDifference);
+                showMessage("Reminder set successfully!");
+                document.getElementById("reminderForm").reset();
+            } else {
+                showError("Please select a future reminder time.");
+            }
+        });
+        function showMessage(message) {
+            var successMessage = document.getElementById("successMessage");
+            successMessage.textContent = message;
+            successMessage.style.display = "block";
+            var errorMessage = document.getElementById("errorMessage");
+            errorMessage.style.display = "none";
+        }
+        function showError(message) {
+            var errorMessage = document.getElementById("errorMessage");
+            errorMessage.textContent = message;
+            errorMessage.style.display = "block";
+            var successMessage = document.getElementById("successMessage");
+            successMessage.style.display = "none";
+        }
+    </script>
+</body>
+</html>
